@@ -1,0 +1,31 @@
+{
+  "name": "issue-commnet-generator",
+  "version": "1.0.0",
+  "description": "GitHub Issue 생성 시, 자동으로 branch & commit 명을 댓글로 생성해주는 GitHub Action",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chuseok22/github-issue-commnet-generator.git"
+  },
+  "keywords": ["github-actions", "issue", "branch", "commit", "automation"],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Chuseok22/github-issue-commnet-generator/issues"
+  },
+  "homepage": "https://github.com/Chuseok22/github-issue-commnet-generator#readme",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vercel/ncc": "^0.38.1",
+    "typescript": "^5.0.0"
+  }
+}

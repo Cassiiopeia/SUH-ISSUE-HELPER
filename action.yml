@@ -1,0 +1,34 @@
+name: "Github Issue Helper: Branch & Commit 생성기"
+description: "Issue 제목을 정규화하여 브랜치 명 & 커밋 메세지 생성"
+author: "Chuseok22"
+runs:
+  using: "node20"
+  main: "dist/index.js"
+
+inputs:
+  token:
+    description: "GitHub token (빈 값이면 GITHUB_TOKEN 자동 사용)"
+    required: false
+    default: ""
+  comment_marker:
+    description: "Upsert용 마커"
+    required: false
+    default: "<!-- issue-normalizer -->"
+  branch_prefix:
+    description: "브랜치 prefix (예: feat/)"
+    required: false
+    default: ""
+  max_branch_length:
+    description: "브랜치 base 최대 길이 (prefix 제외)"
+    required: false
+    default: "120"
+  commit_template:
+    description: "커밋 템플릿: ${issueTitle} ${issueUrl} ${issueNumber} ${branchName} ${date}"
+    required: false
+    default: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"
+
+outputs:
+  branchName:
+    description: "정규화된 브랜치명"
+  commitMessage:
+    description: "정규화된 커밋 메시지"
