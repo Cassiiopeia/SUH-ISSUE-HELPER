@@ -37,8 +37,3 @@ outputs:
     description: "정규화된 브랜치명"
   commitMessage:
     description: "정규화된 커밋 메시지"
-
-permissions:
-  issues: write
-  comments: write
-  branches: write
