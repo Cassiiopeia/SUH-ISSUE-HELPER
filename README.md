@@ -2,32 +2,20 @@
 
 GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치명과 커밋 메시지를 생성하여 댓글로 추가하는 GitHub Action입니다.
 
-## 📦 설치 및 배포
+## 📦 사용법
 
-### 1단계: 레포지토리 설정
-이 GitHub Action을 사용하려면 먼저 `Chuseok22/github-issue-helper` 레포지토리에 다음 작업이 필요합니다:
-
-```bash
-# 1. 모든 파일을 GitHub에 푸시
-git add .
-git commit -m "Initial commit: GitHub Issue Helper"
-git push origin main
-
-# 2. v1 태그 생성 및 푸시
-git tag v1
-git push origin v1
-```
-
-### 2단계: 사용자 레포지토리에서 설정
-
-`.github/workflows/chuseok22-issue-helper.yml` 파일을 생성합니다:
+`.github/workflows/issue-helper.yml` 파일을 생성합니다:
 
 ```yaml
-name: Chuseok22 Issue Branch & Commit Generator
+name: Issue Helper - Generate Branch & Commit Messages
 
 on:
   issues:
     types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
 
 jobs:
   generate-comment:
@@ -41,21 +29,37 @@ jobs:
           branch_prefix: "feat/"
           max_branch_length: 100
           commit_template: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"
+          comment_marker: "<!-- Chuseok22 issue helper -->"
 ```
 
-### 3단계: Private Repository에서 사용하기
+## 🔧 권한 오류 해결
 
-Private Repository에서 사용하려면 Personal Access Token을 사용하세요:
+**"Resource not accessible by integration"** 오류가 발생하는 경우:
+
+### 1. 워크플로우 파일에 permissions 추가 (필수)
+```yaml
+permissions:
+  issues: write
+  contents: read
+```
+
+### 2. Repository Settings에서 Actions 권한 확인
+- Settings > Actions > General
+- "Workflow permissions"에서 **"Read and write permissions"** 선택
+
+### 3. Private Repository의 경우
+Personal Access Token을 사용하세요:
 
 1. GitHub에서 Personal Access Token 생성 (repo 권한 필요)
-2. Repository Settings > Secrets에 토큰 추가 (예: `PERSONAL_TOKEN`)
-3. Workflow에서 토큰 사용:
+2. Repository Settings > Secrets and variables > Actions에 토큰 추가 (예: `PERSONAL_TOKEN`)
+3. 워크플로우에서 토큰 사용:
 
 ```yaml
 - name: Generate Branch & Commit Comment
   uses: Chuseok22/github-issue-helper@v1
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
+    # ...other inputs
 ```
 
 ## 특징
@@ -121,7 +125,7 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
 
 1. **태그 제거**: `[Bug]`, `[Feature]` 등의 태그 제거
 2. **이모지 제거**: 이모지와 제어 문자 제거
-3. **특수문자 처리**: 한글, 영문, 숫자를 제외한 문자는 `_`로 변경
+3. **특수문자 처리**: 한글, 영문, 숫��를 제외한 문자는 `_`로 변경
 4. **브랜치명 형식**: `{prefix}{YYYYMMDD}_#{issueNumber}_{normalizedTitle}`
 
 ## 라이선스
