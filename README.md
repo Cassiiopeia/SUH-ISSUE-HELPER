@@ -53,7 +53,7 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
 
 ```yaml
 - name: Generate Branch & Commit Comment
-  uses: Chuseok22/github-issue-commnet-generator@v1
+  uses: Chuseok22/github-issue-helper@v1
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
 ```
