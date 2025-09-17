@@ -57,7 +57,7 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
 | 입력값 | 설명 | 기본값 | 필수 |
 |--------|------|--------|------|
 | `token` | GitHub 토큰 (빈 값이면 GITHUB_TOKEN 자동 사용) | `""` | ❌ |
-| `comment_marker` | 댓글 업데이트를 위한 마커 | `"<!-- issue-normalizer -->"` | ❌ |
+| `comment_marker` | 댓글 업데이트를 위한 마커 | `"<!-- Chuseok22 issue helper -->"` | ❌ |
 | `branch_prefix` | 브랜치 접두사 (예: feat/) | `""` | ❌ |
 | `max_branch_length` | 브랜치 기본 부분 최대 길이 (prefix 제외) | `"120"` | ❌ |
 | `commit_template` | 커밋 메시지 템플릿 | `"${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"` | ❌ |

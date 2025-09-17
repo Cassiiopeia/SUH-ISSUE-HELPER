@@ -13,7 +13,7 @@ inputs:
   comment_marker:
     description: "Upsert용 마커"
     required: false
-    default: "<!-- issue-normalizer -->"
+    default: "<!-- Chuseok22 issue helper -->"
   branch_prefix:
     description: "브랜치 prefix (예: feat/)"
     required: false
