@@ -2,17 +2,23 @@
 
 GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치명과 커밋 메시지를 생성하여 댓글로 추가하는 GitHub Action입니다.
 
-## 특징
+## 📦 설치 및 배포
 
-- 🌿 **브랜치명 자동 생성**: 날짜, 이슈번호, 정규화된 제목으로 브랜치명 생성
-- 💬 **커밋 메시지 템플릿**: 커스터마이징 가능한 커밋 메시지 템플릿
-- 🔄 **댓글 업데이트**: 이슈 제목 변경 시 자동으로 댓글 업데이트
-- 🔒 **Private Repository 지원**: 사용자 토큰으로 Private Repository에서도 사용 가능
-- 🎯 **한글/영문 지원**: 한글과 영문 이슈 제목 모두 지원
+### 1단계: 레포지토리 설정
+이 GitHub Action을 사용하려면 먼저 `Chuseok22/github-issue-helper` 레포지토리에 다음 작업이 필요합니다:
 
-## 사용법
+```bash
+# 1. 모든 파일을 GitHub에 푸시
+git add .
+git commit -m "Initial commit: GitHub Issue Helper"
+git push origin main
 
-### 1. Workflow 파일 생성
+# 2. v1 태그 생성 및 푸시
+git tag v1
+git push origin v1
+```
+
+### 2단계: 사용자 레포지토리에서 설정
 
 `.github/workflows/chuseok22-issue-helper.yml` 파일을 생성합니다:
 
@@ -37,7 +43,7 @@ jobs:
           commit_template: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"
 ```
 
-### 2. Private Repository에서 사용하기
+### 3단계: Private Repository에서 사용하기
 
 Private Repository에서 사용하려면 Personal Access Token을 사용하세요:
 
@@ -51,6 +57,14 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
 ```
+
+## 특징
+
+- 🌿 **브랜치명 자동 생성**: 날짜, 이슈번호, 정규화된 제목으로 브랜치명 생성
+- 💬 **커밋 메시지 템플릿**: 커스터마이징 가능한 커밋 메시지 템플릿
+- 🔄 **댓글 업데이트**: 이슈 제목 변경 시 자동으로 댓글 업데이트
+- 🔒 **Private Repository 지원**: 사용자 토큰으로 Private Repository에서도 사용 가능
+- 🎯 **한글/영문 지원**: 한글과 영문 이슈 제목 모두 지원
 
 ## 입력 옵션
 
@@ -84,7 +98,7 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
 ### 이슈 제목: `[Bug] 로그인 페이지에서 비밀번호 입력 오류`
 
 생성되는 결과:
-- **브랜치명**: `feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류`
+- **브랜치명**: `feat/20250917_#123_로그인_��이지에서_비밀번호_입력_오류`
 - **커밋 메시지**: `로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123`
 
 ### 생성되는 댓글 예시
