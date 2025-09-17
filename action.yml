@@ -1,5 +1,5 @@
-name: "Github Issue Helper: Branch & Commit 생성기"
-description: "Issue 제목을 정규화하여 브랜치 명 & 커밋 메세지 생성"
+name: "Chuseok22 Issue Helper"
+description: "GitHub Issue 생성 시 자동으로 브랜치명과 커밋 메시지를 댓글로 생성해주는 GitHub Action"
 author: "Chuseok22"
 runs:
   using: "node20"
@@ -11,7 +11,7 @@ inputs:
     required: false
     default: ""
   comment_marker:
-    description: "Upsert용 마커"
+    description: "댓글 업데이트를 위한 마커"
     required: false
     default: "<!-- Chuseok22 issue helper -->"
   branch_prefix:

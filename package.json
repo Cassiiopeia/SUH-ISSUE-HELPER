@@ -1,5 +1,5 @@
 {
-  "name": "issue-commnet-generator",
+  "name": "github-issue-helper",
   "version": "1.0.0",
   "description": "GitHub Issue 생성 시, 자동으로 branch & commit 명을 댓글로 생성해주는 GitHub Action",
   "main": "dist/index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Chuseok22/github-issue-commnet-generator.git"
+    "url": "git+https://github.com/Chuseok22/github-issue-helper.git"
   },
   "keywords": ["github-actions", "issue", "branch", "commit", "automation"],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Chuseok22/github-issue-commnet-generator/issues"
+    "url": "https://github.com/Chuseok22/github-issue-helper/issues"
   },
-  "homepage": "https://github.com/Chuseok22/github-issue-commnet-generator#readme",
+  "homepage": "https://github.com/Chuseok22/github-issue-helper#readme",
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.1"

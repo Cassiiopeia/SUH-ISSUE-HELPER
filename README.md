@@ -1,4 +1,4 @@
-# GitHub Issue Comment Generator
+# GitHub Issue Helper
 
 GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치명과 커밋 메시지를 생성하여 댓글로 추가하는 GitHub Action입니다.
 
@@ -14,10 +14,10 @@ GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치�
 
 ### 1. Workflow 파일 생성
 
-`.github/workflows/issue-comment.yml` 파일을 생성합니다:
+`.github/workflows/chuseok22-issue-helper.yml` 파일을 생성합니다:
 
 ```yaml
-name: Issue Branch & Commit Generator
+name: Chuseok22 Issue Branch & Commit Generator
 
 on:
   issues:
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Chuseok22/github-issue-commnet-generator@v1
+        uses: Chuseok22/github-issue-helper@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch_prefix: "feat/"
@@ -90,9 +90,17 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
 ### 생성되는 댓글 예시
 
 ```
-<!-- issue-normalizer -->
-브랜치: `feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류`
-커밋: `로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123`
+<!-- Chuseok22 issue helper -->
+## Chuseok22 Issue Helper
+### 브랜치명
+```
+feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류
+```
+
+### 커밋 메시지
+```
+로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123
+```
 ```
 
 ## 정규화 규칙

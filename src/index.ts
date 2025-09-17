@@ -48,7 +48,7 @@ async function run(): Promise<void> {
     const dateYYYYMMDD: string = formatDateYYYYMMDD(new Date());
 
     const tokenInput: string = core.getInput("token", { required: false }).trim();
-    const commentMarker: string = core.getInput("comment_marker", { required: false }) || "<!-- issue-normalizer -->";
+    const commentMarker: string = core.getInput("comment_marker", { required: false }) || "<!-- Chuseok22 issue helper -->";
     const branchPrefix: string = core.getInput("branch_prefix", { required: false }) || "";
     const maxBranchLengthRaw: string = core.getInput("max_branch_length", { required: false }) || "120";
     const commitTemplate: string =
