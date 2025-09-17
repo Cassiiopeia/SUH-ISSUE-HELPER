@@ -9,6 +9,7 @@ import { NormalizeInputs } from "./types";
 export declare function extractIssueNumber(issueUrl: string): string;
 export declare function extractIssueTitle(rawTitle: string): string;
 export declare function formatDateYYYYMMDD(d: Date): string;
+export declare function normalizeTitle(title: string): string;
 export declare function createBranchName(issueTitle: string, issueNumber: string, dateYYYYMMDD: string, branchPrefix: string, maxBranchLength: number): string;
 export declare function renderCommitMessage(template: string, ctx: {
     issueTitle: string;

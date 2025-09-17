@@ -30076,6 +30076,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.extractIssueNumber = extractIssueNumber;
 exports.extractIssueTitle = extractIssueTitle;
 exports.formatDateYYYYMMDD = formatDateYYYYMMDD;
+exports.normalizeTitle = normalizeTitle;
 exports.createBranchName = createBranchName;
 exports.renderCommitMessage = renderCommitMessage;
 exports.normalizeAll = normalizeAll;
@@ -30103,9 +30104,18 @@ function formatDateYYYYMMDD(d) {
     const dd = String(d.getDate()).padStart(2, "0");
     return `${yyyy}${mm}${dd}`;
 }
+function normalizeTitle(title) {
+    // 한글/영문/숫자를 제외한 모든 문자를 언더바로 치환
+    let normalized = title.replace(/[^a-zA-Z0-9가-힣]/gu, "_");
+    // 연속된 언더바를 하나로 축약
+    normalized = normalized.replace(/_+/g, "_");
+    // 앞뒤 언더바 제거
+    normalized = normalized.replace(/^_+|_+$/g, "");
+    return normalized;
+}
 function createBranchName(issueTitle, issueNumber, dateYYYYMMDD, branchPrefix, maxBranchLength) {
-    const formattedTitle = issueTitle.replace(/[^a-zA-Z0-9가-힣]/gu, "_");
-    const base = `${dateYYYYMMDD}_#${issueNumber}_${formattedTitle}`;
+    const normalizedTitle = normalizeTitle(issueTitle);
+    const base = `${dateYYYYMMDD}_#${issueNumber}_${normalizedTitle}`;
     const limitedBase = maxBranchLength > 0 ? base.slice(0, maxBranchLength) : base;
     return `${branchPrefix}${limitedBase}`;
 }
@@ -30119,9 +30129,10 @@ function renderCommitMessage(template, ctx) {
         .trim();
 }
 function normalizeAll(input) {
+    const normalizedTitle = normalizeTitle(input.title);
     const branchName = createBranchName(input.title, input.issueNumber, input.dateYYYYMMDD, input.branchPrefix, input.maxBranchLength);
     const commitMessage = renderCommitMessage(input.commitTemplate, {
-        issueTitle: input.title,
+        issueTitle: normalizedTitle, // 정규화된 제목 사용
         issueUrl: input.issueUrl,
         issueNumber: input.issueNumber,
         branchName,

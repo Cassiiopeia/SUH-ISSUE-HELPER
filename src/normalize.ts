@@ -28,6 +28,16 @@ export function formatDateYYYYMMDD(d: Date): string {
   return `${yyyy}${mm}${dd}`;
 }
 
+export function normalizeTitle(title: string): string {
+  // 한글/영문/숫자를 제외한 모든 문자를 언더바로 치환
+  let normalized = title.replace(/[^a-zA-Z0-9가-힣]/gu, "_");
+  // 연속된 언더바를 하나로 축약
+  normalized = normalized.replace(/_+/g, "_");
+  // 앞뒤 언더바 제거
+  normalized = normalized.replace(/^_+|_+$/g, "");
+  return normalized;
+}
+
 export function createBranchName(
     issueTitle: string,
     issueNumber: string,
@@ -35,8 +45,8 @@ export function createBranchName(
     branchPrefix: string,
     maxBranchLength: number,
 ): string {
-  const formattedTitle: string = issueTitle.replace(/[^a-zA-Z0-9가-힣]/gu, "_");
-  const base: string = `${dateYYYYMMDD}_#${issueNumber}_${formattedTitle}`;
+  const normalizedTitle: string = normalizeTitle(issueTitle);
+  const base: string = `${dateYYYYMMDD}_#${issueNumber}_${normalizedTitle}`;
   const limitedBase: string = maxBranchLength > 0 ? base.slice(0, maxBranchLength) : base;
   return `${branchPrefix}${limitedBase}`;
 }
@@ -61,6 +71,8 @@ export function renderCommitMessage(
 }
 
 export function normalizeAll(input: NormalizeInputs): { branchName: string; commitMessage: string } {
+  const normalizedTitle = normalizeTitle(input.title);
+
   const branchName: string = createBranchName(
       input.title,
       input.issueNumber,
@@ -70,7 +82,7 @@ export function normalizeAll(input: NormalizeInputs): { branchName: string; comm
   );
 
   const commitMessage: string = renderCommitMessage(input.commitTemplate, {
-    issueTitle: input.title,
+    issueTitle: normalizedTitle, // 정규화된 제목 사용
     issueUrl: input.issueUrl,
     issueNumber: input.issueNumber,
     branchName,
