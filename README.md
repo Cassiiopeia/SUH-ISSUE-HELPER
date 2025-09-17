@@ -90,17 +90,17 @@ Private Repository에서 사용하려면 Personal Access Token을 사용하세�
 ### 생성되는 댓글 예시
 
 ```
-<!-- Chuseok22 issue helper -->
-## Chuseok22 Issue Helper
-### 브랜치명
-```
-feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류
-```
-
-### 커밋 메시지
-```
-로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123
-```
+    <!-- Chuseok22 issue helper -->
+    ## Chuseok22 Issue Helper
+    ### 브랜치명
+    ```
+    feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류
+    ```
+    
+    ### 커밋 메시지
+    ```
+    로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123
+    ```
 ```
 
 ## 정규화 규칙
