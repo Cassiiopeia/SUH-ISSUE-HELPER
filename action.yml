@@ -1,6 +1,11 @@
 name: "Chuseok22 Issue Helper"
 description: "GitHub Issue 생성 시 자동으로 브랜치명과 커밋 메시지를 댓글로 생성해주는 GitHub Action"
 author: "Chuseok22"
+
+branding:
+  icon: 'git-branch'
+  color: 'blue'
+
 runs:
   using: "node20"
   main: "dist/index.js"
@@ -32,3 +37,8 @@ outputs:
     description: "정규화된 브랜치명"
   commitMessage:
     description: "정규화된 커밋 메시지"
+
+permissions:
+  issues: write
+  comments: write
+  branches: write
