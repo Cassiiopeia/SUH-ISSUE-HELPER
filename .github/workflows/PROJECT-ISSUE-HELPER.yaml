@@ -1,0 +1,25 @@
+name: "Issue Helper"
+
+permissions:
+  issues: write
+  contents: read
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  generate-comment:
+    # 이슈가 열리거나 제목이 수정될 때만 실행
+    if: github.event.action == 'opened' || (github.event.action == 'edited' && github.event.changes.title)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Branch & Commit Comment
+        uses: Cassiiopeia/github-issue-helper@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch_prefix: "feat/"
+          max_branch_length: 100
+          commit_template: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"
+          comment_marker: "<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->"
+
