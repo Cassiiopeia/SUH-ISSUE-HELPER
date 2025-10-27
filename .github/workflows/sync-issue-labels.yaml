@@ -8,6 +8,7 @@ on:
     paths:
       - .github/labels/issue-label.yml
       - .github/workflows/sync-issue-labels.yaml
+  workflow_dispatch:
 
 jobs:
   label-sync:
