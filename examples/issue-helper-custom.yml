@@ -1,0 +1,36 @@
+# 커스터마이징 예시
+# 브랜치 prefix, 커밋 템플릿, 댓글 마커 등을 커스터마이징한 예시
+
+name: Issue Helper - Custom Configuration
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  generate-comment:
+    if: github.event.action == 'opened' || (github.event.action == 'edited' && github.event.changes.title)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Branch & Commit Comment
+        uses: Cassiiopeia/github-issue-helper@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # 브랜치 접두사 설정 (예: feat/, fix/, hotfix/ 등)
+          branch_prefix: "feat/"
+          
+          # 브랜치명 최대 길이 제한 (prefix 제외)
+          max_branch_length: 100
+          
+          # 커밋 메시지 템플릿
+          # 사용 가능한 변수: ${issueTitle}, ${issueUrl}, ${issueNumber}, ${branchName}, ${date}
+          commit_template: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"
+          
+          # 댓글 마커 (댓글 업데이트 시 기존 댓글을 찾는데 사용)
+          comment_marker: "<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->"
+

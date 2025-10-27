@@ -2,6 +2,16 @@
 
 GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치명과 커밋 메시지를 생성하여 댓글로 추가하는 GitHub Action입니다.
 
+## 📁 빠른 시작
+
+다른 프로젝트에 적용하기 위한 샘플 워크플로우 파일은 [`examples/`](examples/) 폴더에 있습니다:
+
+- [기본 사용법](examples/issue-helper-basic.yml) - 가장 간단한 설정
+- [커스터마이징 예시](examples/issue-helper-custom.yml) - 모든 옵션 활용
+- [Private Repository용](examples/issue-helper-private-repo.yml) - Personal Access Token 사용
+
+원하는 파일을 복사하여 프로젝트의 `.github/workflows/` 폴더에 붙여넣으세요.
+
 ## 📦 사용법
 
 `.github/workflows/issue-helper.yml` 파일을 생성합니다:
