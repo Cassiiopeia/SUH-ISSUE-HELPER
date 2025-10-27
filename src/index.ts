@@ -48,7 +48,7 @@ async function run(): Promise<void> {
     const dateYYYYMMDD: string = formatDateYYYYMMDD(new Date());
 
     const tokenInput: string = core.getInput("token", { required: false }).trim();
-    const commentMarker: string = core.getInput("comment_marker", { required: false }) || "<!-- Chuseok22 issue helper -->";
+    const commentMarker: string = core.getInput("comment_marker", { required: false }) || "<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->";
     const branchPrefix: string = core.getInput("branch_prefix", { required: false }) || "";
     const maxBranchLengthRaw: string = core.getInput("max_branch_length", { required: false }) || "120";
     const commitTemplate: string =
@@ -81,8 +81,11 @@ async function run(): Promise<void> {
     const { branchName, commitMessage } = normalizeAll(inputs);
 
     const body: string = `${commentMarker}
-## Chuseok22 Issue Helper
-### 브랜치명
+
+Guide by SUH-LAB
+---
+
+### 브랜치
 \`\`\`
 ${branchName}
 \`\`\`
@@ -90,7 +93,9 @@ ${branchName}
 ### 커밋 메시지
 \`\`\`
 ${commitMessage}
-\`\`\``;
+\`\`\`
+
+${commentMarker}`;
 
     const comments = await octokit.paginate(octokit.rest.issues.listComments, {
       owner,

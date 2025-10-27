@@ -1,6 +1,6 @@
-name: "Chuseok22 Issue Helper"
+name: "SUH Issue Helper"
 description: "GitHub Issue 생성 시 자동으로 브랜치명과 커밋 메시지를 댓글로 생성해주는 GitHub Action"
-author: "Chuseok22"
+author: "Cassiiopeia"
 
 branding:
   icon: 'git-branch'
@@ -18,7 +18,7 @@ inputs:
   comment_marker:
     description: "댓글 업데이트를 위한 마커"
     required: false
-    default: "<!-- Chuseok22 issue helper -->"
+    default: "<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->"
   branch_prefix:
     description: "브랜치 prefix (예: feat/)"
     required: false

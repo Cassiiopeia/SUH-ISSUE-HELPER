@@ -30002,7 +30002,7 @@ async function run() {
         const title = (0, normalize_1.extractIssueTitle)(rawTitle);
         const dateYYYYMMDD = (0, normalize_1.formatDateYYYYMMDD)(new Date());
         const tokenInput = core.getInput("token", { required: false }).trim();
-        const commentMarker = core.getInput("comment_marker", { required: false }) || "<!-- Chuseok22 issue helper -->";
+        const commentMarker = core.getInput("comment_marker", { required: false }) || "<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->";
         const branchPrefix = core.getInput("branch_prefix", { required: false }) || "";
         const maxBranchLengthRaw = core.getInput("max_branch_length", { required: false }) || "120";
         const commitTemplate = core.getInput("commit_template", { required: false }) ||

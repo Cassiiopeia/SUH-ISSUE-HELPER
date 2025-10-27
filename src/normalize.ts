@@ -82,7 +82,7 @@ export function normalizeAll(input: NormalizeInputs): { branchName: string; comm
   );
 
   const commitMessage: string = renderCommitMessage(input.commitTemplate, {
-    issueTitle: normalizedTitle, // 정규화된 제목 사용
+    issueTitle: input.title, // 원본 제목 사용 (이모지/태그는 이미 제거됨)
     issueUrl: input.issueUrl,
     issueNumber: input.issueNumber,
     branchName,

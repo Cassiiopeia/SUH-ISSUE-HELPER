@@ -23,13 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Chuseok22/github-issue-helper@v1
+        uses: Cassiiopeia/github-issue-helper@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch_prefix: "feat/"
           max_branch_length: 100
           commit_template: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"
-          comment_marker: "<!-- Chuseok22 issue helper -->"
+          comment_marker: "<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->"
 ```
 
 ## 🔧 권한 오류 해결
@@ -56,7 +56,7 @@ Personal Access Token을 사용하세요:
 
 ```yaml
 - name: Generate Branch & Commit Comment
-  uses: Chuseok22/github-issue-helper@v1
+  uses: Cassiiopeia/github-issue-helper@v1
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
     # ...other inputs
@@ -75,7 +75,7 @@ Personal Access Token을 사용하세요:
 | 입력값 | 설명 | 기본값 | 필수 |
 |--------|------|--------|------|
 | `token` | GitHub 토큰 (빈 값이면 GITHUB_TOKEN 자동 사용) | `""` | ❌ |
-| `comment_marker` | 댓글 업데이트를 위한 마커 | `"<!-- Chuseok22 issue helper -->"` | ❌ |
+| `comment_marker` | 댓글 업데이트를 위한 마커 | `"<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->"` | ❌ |
 | `branch_prefix` | 브랜치 접두사 (예: feat/) | `""` | ❌ |
 | `max_branch_length` | 브랜치 기본 부분 최대 길이 (prefix 제외) | `"120"` | ❌ |
 | `commit_template` | 커밋 메시지 템플릿 | `"${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"` | ❌ |
@@ -91,7 +91,7 @@ Personal Access Token을 사용하세요:
 
 커밋 메시지 템플릿에서 사용할 수 있는 변수들:
 
-- `${issueTitle}`: 정규화된 이슈 제목
+- `${issueTitle}`: 이슈 제목 (이모지 및 태그 제거됨, 특수문자 유지)
 - `${issueUrl}`: 이슈 URL
 - `${issueNumber}`: 이슈 번호
 - `${branchName}`: 생성된 브랜치명
@@ -108,17 +108,22 @@ Personal Access Token을 사용하세요:
 ### 생성되는 댓글 예시
 
 ```
-    <!-- Chuseok22 issue helper -->
-    ## Chuseok22 Issue Helper
-    ### 브랜치명
-    ```
-    feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류
-    ```
-    
-    ### 커밋 메시지
-    ```
-    로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123
-    ```
+<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->
+
+Guide by SUH-LAB
+---
+
+### 브랜치
+```
+feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류
+```
+
+### 커밋 메시지
+```
+로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123
+```
+
+<!-- 이 댓글은 SUH-ISSUE-HELPER 에 의해 자동으로 생성되었습니다. - https://github.com/Cassiiopeia/github-issue-helper -->
 ```
 
 ## 정규화 규칙
