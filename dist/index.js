@@ -30029,8 +30029,11 @@ async function run() {
         };
         const { branchName, commitMessage } = (0, normalize_1.normalizeAll)(inputs);
         const body = `${commentMarker}
-## Chuseok22 Issue Helper
-### 브랜치명
+
+Guide by SUH-LAB
+---
+
+### 브랜치
 \`\`\`
 ${branchName}
 \`\`\`
@@ -30038,7 +30041,9 @@ ${branchName}
 ### 커밋 메시지
 \`\`\`
 ${commitMessage}
-\`\`\``;
+\`\`\`
+
+${commentMarker}`;
         const comments = await octokit.paginate(octokit.rest.issues.listComments, {
             owner,
             repo,
@@ -30132,7 +30137,7 @@ function normalizeAll(input) {
     const normalizedTitle = normalizeTitle(input.title);
     const branchName = createBranchName(input.title, input.issueNumber, input.dateYYYYMMDD, input.branchPrefix, input.maxBranchLength);
     const commitMessage = renderCommitMessage(input.commitTemplate, {
-        issueTitle: normalizedTitle, // 정규화된 제목 사용
+        issueTitle: input.title, // 원본 제목 사용 (이모지/태그는 이미 제거됨)
         issueUrl: input.issueUrl,
         issueNumber: input.issueNumber,
         branchName,
