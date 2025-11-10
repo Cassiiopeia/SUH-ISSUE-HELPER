@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Cassiiopeia/github-issue-helper@main
+        uses: Cassiiopeia/github-issue-helper@deploy
         with:
           # Personal Access Token 사용
           # 설정 방법:
