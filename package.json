@@ -1,6 +1,6 @@
 {
   "name": "github-issue-helper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "GitHub Issue 생성 시, 자동으로 branch & commit 명을 댓글로 생성해주는 GitHub Action",
   "main": "dist/index.js",
   "scripts": {
