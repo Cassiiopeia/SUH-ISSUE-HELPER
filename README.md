@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Cassiiopeia/github-issue-helper@v1
+        uses: Cassiiopeia/github-issue-helper@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch_prefix: "feat/"
@@ -73,7 +73,7 @@ Personal Access Token을 사용하세요:
 
 ```yaml
 - name: Generate Branch & Commit Comment
-  uses: Cassiiopeia/github-issue-helper@v1
+  uses: Cassiiopeia/github-issue-helper@main
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
     # ...other inputs
