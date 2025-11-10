@@ -4,7 +4,8 @@ GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치�
 
 <!-- AUTO-VERSION-SECTION: DO NOT EDIT MANUALLY -->
 <!-- 이 섹션은 .github/workflows/PROJECT-README-VERSION-UPDATE.yaml에 의해 자동으로 업데이트됩니다 -->
-## 최신 버전 : v1.0.0
+<!-- 수정하지마세요 자동으로 동기화 됩니다 -->
+## 최신 버전 : v1.0.2 (2025-11-10)
 
 [전체 버전 기록 보기](CHANGELOG.md)
 <!-- END-AUTO-VERSION-SECTION -->
@@ -40,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Cassiiopeia/github-issue-helper@main
+        uses: Cassiiopeia/github-issue-helper@deploy
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch_prefix: "feat/"
@@ -73,7 +74,7 @@ Personal Access Token을 사용하세요:
 
 ```yaml
 - name: Generate Branch & Commit Comment
-  uses: Cassiiopeia/github-issue-helper@main
+  uses: Cassiiopeia/github-issue-helper@deploy
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
     # ...other inputs
