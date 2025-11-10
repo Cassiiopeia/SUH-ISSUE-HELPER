@@ -44,3 +44,9 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+# ====================================================================
+# SUH-DEVOPS-TEMPLATE: Auto-added entries
+# ====================================================================
+/.idea
+/.claude/settings.local.json

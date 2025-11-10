@@ -2,6 +2,13 @@
 
 GitHub Issue가 생성되거나 제목이 수정될 때 자동으로 브랜치명과 커밋 메시지를 생성하여 댓글로 추가하는 GitHub Action입니다.
 
+<!-- AUTO-VERSION-SECTION: DO NOT EDIT MANUALLY -->
+<!-- 이 섹션은 .github/workflows/PROJECT-README-VERSION-UPDATE.yaml에 의해 자동으로 업데이트됩니다 -->
+## 최신 버전 : v1.0.0
+
+[전체 버전 기록 보기](CHANGELOG.md)
+<!-- END-AUTO-VERSION-SECTION -->
+
 ## 📁 빠른 시작
 
 다른 프로젝트에 적용하기 위한 샘플 워크플로우 파일은 [`examples/`](examples/) 폴더에 있습니다:
@@ -33,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Cassiiopeia/github-issue-helper@v1
+        uses: Cassiiopeia/github-issue-helper@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch_prefix: "feat/"
@@ -66,7 +73,7 @@ Personal Access Token을 사용하세요:
 
 ```yaml
 - name: Generate Branch & Commit Comment
-  uses: Cassiiopeia/github-issue-helper@v1
+  uses: Cassiiopeia/github-issue-helper@main
   with:
     token: ${{ secrets.PERSONAL_TOKEN }}
     # ...other inputs

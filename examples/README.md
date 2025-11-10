@@ -153,7 +153,7 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'feature')
     runs-on: ubuntu-latest
     steps:
-      - uses: Cassiiopeia/github-issue-helper@v1
+      - uses: Cassiiopeia/github-issue-helper@main
         with:
           branch_prefix: "feat/"
           commit_template: "feat: ${issueTitle} ${issueUrl}"
@@ -162,7 +162,7 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'bug')
     runs-on: ubuntu-latest
     steps:
-      - uses: Cassiiopeia/github-issue-helper@v1
+      - uses: Cassiiopeia/github-issue-helper@main
         with:
           branch_prefix: "fix/"
           commit_template: "fix: ${issueTitle} ${issueUrl}"

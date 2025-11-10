@@ -1,0 +1,221 @@
+# ===================================================================
+# GitHub Action 빌드 및 배포 워크플로우
+# ===================================================================
+#
+# 이 워크플로우는 deploy 브랜치에 push가 발생할 때 빌드를 수행하고
+# 이미 생성된 태그를 현재 커밋으로 이동시킵니다.
+#
+# 작동 방식:
+# 1. deploy 브랜치 푸시 시 트리거 (또는 수동 실행)
+# 2. 빌드 수행 (TypeScript → JavaScript)
+# 3. 빌드된 파일 커밋
+# 4. version.yml에서 현재 버전 확인
+# 5. 기존 태그를 현재 커밋으로 이동 (삭제 후 재생성)
+#
+# 주의사항:
+# - 태그는 이미 main 브랜치에서 생성되어 있습니다 (PROJECT-COMMON-VERSION-CONTROL.yaml)
+# - main 브랜치에 push → 버전 증가 → 태그 생성 (v1.0.1, v1.0.2, ...)
+# - deploy 브랜치에 push → 빌드 → 태그를 현재 커밋으로 이동
+# - 버전은 version.yml 파일을 기준으로 합니다
+#
+# 수동 실행:
+# - GitHub Actions 탭에서 "Run workflow" 버튼으로 수동 실행 가능
+# - 브랜치 선택 가능 (기본값: deploy)
+#
+# ===================================================================
+
+name: ACTION BUILD AND DEPLOY
+
+on:
+  push:
+    branches: ["deploy"]
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - 'CHANGELOG.json'
+      - '.github/workflows/**'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: '배포할 브랜치'
+        required: false
+        default: 'deploy'
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-tag:
+    name: 빌드 및 태그 이동
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch || 'deploy' }}
+
+      - name: Git 설정
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 의존성 설치
+        run: |
+          echo "📦 의존성 설치 중..."
+          npm ci
+          echo "✅ 의존성 설치 완료"
+
+      - name: TypeScript 빌드
+        run: |
+          echo "🔨 TypeScript 빌드 중..."
+          npm run build
+          echo "✅ TypeScript 빌드 완료"
+
+      - name: Action 패키징
+        run: |
+          echo "📦 Action 패키징 중..."
+          npm run package
+          echo "✅ Action 패키징 완료"
+
+      - name: 빌드 결과 확인
+        run: |
+          echo "🔍 빌드 결과 확인 중..."
+          if [ ! -d "dist" ]; then
+            echo "❌ dist 폴더가 없습니다."
+            exit 1
+          fi
+          if [ ! -f "dist/index.js" ]; then
+            echo "❌ dist/index.js 파일이 없습니다."
+            exit 1
+          fi
+          echo "✅ 빌드 결과 확인 완료"
+          ls -la dist/
+
+      - name: 빌드된 파일 커밋
+        run: |
+          echo "📝 빌드된 파일 확인 중..."
+          
+          DEPLOY_BRANCH="${{ github.event.inputs.branch || 'deploy' }}"
+          
+          # 빌드된 파일이 변경되었는지 확인
+          git add dist/
+          
+          if git diff --staged --quiet; then
+            echo "ℹ️ 빌드된 파일에 변경사항이 없습니다."
+          else
+            echo "📤 빌드된 파일 커밋 중..."
+            REPO_NAME=$(basename "${{ github.repository }}")
+            
+            git commit -m "$REPO_NAME 빌드 : build : 빌드 파일 업데이트 [skip ci]"
+            git push origin "$DEPLOY_BRANCH"
+            echo "✅ 빌드된 파일 커밋 완료"
+          fi
+
+      - name: 버전 관리 스크립트 권한 설정
+        run: |
+          if [ -f ".github/scripts/version_manager.sh" ]; then
+            chmod +x .github/scripts/version_manager.sh
+            echo "✅ 버전 관리 스크립트 권한 설정 완료"
+          else
+            echo "⚠️ .github/scripts/version_manager.sh 파일을 찾을 수 없습니다."
+          fi
+
+      - name: 현재 버전 확인
+        id: version
+        run: |
+          echo "🔍 현재 버전 확인 중..."
+          
+          if [ -f ".github/scripts/version_manager.sh" ]; then
+            CURRENT_VERSION=$(./.github/scripts/version_manager.sh get | tail -n 1)
+          elif [ -f "version.yml" ]; then
+            CURRENT_VERSION=$(grep "^version:" version.yml | sed 's/version: *"\([^"]*\)".*/\1/')
+          elif [ -f "package.json" ]; then
+            CURRENT_VERSION=$(grep '"version":' package.json | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+          else
+            echo "❌ 버전 정보를 찾을 수 없습니다."
+            exit 1
+          fi
+          
+          if [ -z "$CURRENT_VERSION" ]; then
+            echo "❌ 버전 확인 실패"
+            exit 1
+          fi
+          
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "✅ 현재 버전: $CURRENT_VERSION"
+
+      - name: 기존 태그를 현재 커밋으로 이동
+        run: |
+          CURRENT_VERSION="${{ steps.version.outputs.version }}"
+          TAG_NAME="v$CURRENT_VERSION"
+          
+          echo "🏷️ 기존 태그를 현재 커밋으로 이동 중: $TAG_NAME"
+          
+          # 기존 태그 확인
+          git fetch --tags
+          if git tag -l | grep -q "^$TAG_NAME$"; then
+            echo "✅ 태그 $TAG_NAME이 존재합니다. 현재 커밋으로 이동합니다."
+            
+            # 기존 태그 삭제 (원격 및 로컬)
+            git tag -d "$TAG_NAME" || true
+            git push origin ":refs/tags/$TAG_NAME" || true
+            
+            # 현재 커밋에 태그 재생성
+            if git tag "$TAG_NAME" && git push origin "$TAG_NAME"; then
+              echo "✅ 태그가 현재 커밋으로 이동되었습니다: $TAG_NAME"
+            else
+              echo "❌ 태그 이동 실패: $TAG_NAME"
+              exit 1
+            fi
+          else
+            echo "⚠️ 태그 $TAG_NAME이 존재하지 않습니다. 새로 생성합니다."
+            if git tag "$TAG_NAME" && git push origin "$TAG_NAME"; then
+              echo "✅ Git 태그 생성 완료: $TAG_NAME"
+            else
+              echo "❌ 태그 생성 실패: $TAG_NAME"
+              exit 1
+            fi
+          fi
+
+      - name: 배포 완료 요약
+        if: always()
+        run: |
+          DEPLOY_BRANCH="${{ github.event.inputs.branch || github.ref_name }}"
+          echo ""
+          echo "🎉 빌드 및 태그 이동 완료!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 배포 정보:"
+          echo "  🔖 태그: v${{ steps.version.outputs.version }}"
+          echo "  📦 빌드 상태: ${{ job.status }}"
+          echo "  📝 커밋: ${{ github.sha }}"
+          echo "  🌿 브랜치: $DEPLOY_BRANCH"
+          echo "  🕐 시간: $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "📖 사용 방법:"
+          echo "  uses: ${{ github.repository }}@v${{ steps.version.outputs.version }}"
+          echo "  또는"
+          echo "  uses: ${{ github.repository }}@main"
+          echo ""
+          echo "📋 버전 관리 흐름:"
+          echo "  1. main 브랜치에 push → 버전 증가 (1.0.1 → 1.0.2)"
+          echo "  2. main 브랜치에 push → 태그 생성 (v1.0.2)"
+          echo "  3. deploy 브랜치에 push → 빌드 → 태그 이동"
+          echo ""
+          
+          if [ "${{ job.status }}" != "success" ]; then
+            echo "❌ 일부 단계에서 오류가 발생했습니다. 로그를 확인해주세요."
+          else
+            echo "✅ 빌드 및 태그 이동이 완료되었습니다."
+            echo "📦 GitHub Action이 배포되었습니다."
+          fi
+
