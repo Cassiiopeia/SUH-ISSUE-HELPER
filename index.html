@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SUH Issue Helper | 이슈에서 브랜치명과 커밋 메시지를 자동 생성하는 GitHub Action</title>
+<meta name="description" content="GitHub 이슈가 생성되거나 제목이 수정되면 브랜치명과 커밋 메시지를 자동으로 만들어 댓글로 남겨 주는 GitHub Action입니다.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://cassiiopeia.github.io/SUH-ISSUE-HELPER/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SUH-LAB">
+<meta property="og:title" content="SUH Issue Helper | 이슈에서 브랜치명과 커밋 메시지를 자동 생성하는 GitHub Action">
+<meta property="og:description" content="GitHub 이슈가 생성되거나 제목이 수정되면 브랜치명과 커밋 메시지를 자동으로 만들어 댓글로 남겨 주는 GitHub Action입니다.">
+<meta property="og:url" content="https://cassiiopeia.github.io/SUH-ISSUE-HELPER/">
+<meta property="og:image" content="https://cassiiopeia.github.io/SUH-ISSUE-HELPER/og.png">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SUH Issue Helper | 이슈에서 브랜치명과 커밋 메시지를 자동 생성하는 GitHub Action">
+<meta name="twitter:description" content="GitHub 이슈가 생성되거나 제목이 수정되면 브랜치명과 커밋 메시지를 자동으로 만들어 댓글로 남겨 주는 GitHub Action입니다.">
+<meta name="twitter:image" content="https://cassiiopeia.github.io/SUH-ISSUE-HELPER/og.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareSourceCode", "name": "SUH Issue Helper", "description": "GitHub 이슈가 생성되거나 제목이 수정되면 브랜치명과 커밋 메시지를 자동으로 만들어 댓글로 남겨 주는 GitHub Action입니다.", "codeRepository": "https://github.com/Cassiiopeia/SUH-ISSUE-HELPER", "programmingLanguage": "YAML", "url": "https://cassiiopeia.github.io/SUH-ISSUE-HELPER/", "image": "https://cassiiopeia.github.io/SUH-ISSUE-HELPER/og.png", "author": {"@type": "Person", "name": "Suh Saechan", "alternateName": "서새찬", "url": "https://lab.suhsaechan.kr/dashboard"}}</script>
+<style>
+:root{--bg:#fafafc;--fg:#1e293b;--mut:#64748b;--card:#fff;--bd:#e2e8f0;--pri:#4338ca;--pri2:#6366f1;--soft:#eef2ff;--code:#0f172a;--codefg:#e2e8f0}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1020;--fg:#e5e7eb;--mut:#94a3b8;--card:#131a2e;--bd:#25304a;--pri:#a5b4fc;--pri2:#818cf8;--soft:#1b2342;--code:#070b17;--codefg:#e2e8f0}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--pri);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 80%,transparent);border-bottom:1px solid var(--bd)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+header.top b{font-weight:800;letter-spacing:-.02em}header.top nav a{margin-left:18px;color:var(--mut);font-size:.92rem}
+.hero{position:relative;overflow:hidden;padding:72px 0 56px}
+.hero:before{content:"";position:absolute;inset:-120px -80px auto auto;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--pri2) 28%,transparent),transparent)}
+.hero h1{position:relative;font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;letter-spacing:-.03em;margin:0 0 14px}
+.hero p.lead{position:relative;font-size:1.15rem;color:var(--mut);max-width:680px;margin:0 0 22px}
+.badges{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.badge{display:inline-block;padding:3px 12px;border-radius:999px;background:var(--soft);color:var(--pri);font-size:.82rem;font-weight:600;border:1px solid color-mix(in srgb,var(--pri2) 25%,transparent)}
+.btns{position:relative;display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:999px;font-weight:700;font-size:.95rem;border:1px solid var(--bd);background:var(--card);color:var(--fg)}
+.btn.pri{background:var(--pri2);border-color:var(--pri2);color:#fff}.btn:hover{text-decoration:none;filter:brightness(1.06)}
+section{padding:40px 0}section h2{font-size:1.6rem;letter-spacing:-.02em;margin:0 0 6px}section p.sub{color:var(--mut);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px 22px}
+.card h3{margin:0 0 6px;font-size:1.05rem}.card p{margin:0;color:var(--mut);font-size:.95rem}
+.code{position:relative;margin:12px 0 18px;background:var(--code);border-radius:16px;overflow:hidden}
+.code pre{margin:0;padding:18px 20px;overflow-x:auto;color:var(--codefg);font:13.5px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.code .lab{position:absolute;top:8px;left:14px;font-size:.72rem;color:#94a3b8;font-weight:700;letter-spacing:.04em}
+.code .lab+button+pre{padding-top:30px}
+.copy{position:absolute;top:8px;right:10px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;border-radius:8px;font-size:.75rem;padding:3px 10px;cursor:pointer}
+.tbl{overflow-x:auto;border:1px solid var(--bd);border-radius:16px;background:var(--card);margin:12px 0 18px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top}
+th{background:var(--soft);color:var(--pri);font-weight:700;white-space:nowrap}tr:last-child td{border-bottom:0}
+td code,p code,li code{background:var(--soft);color:var(--pri);padding:1px 6px;border-radius:6px;font-size:.88em}
+.note{border-left:4px solid var(--pri2);background:var(--soft);padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0;font-size:.95rem}
+.note.warn{border-color:#f59e0b;background:color-mix(in srgb,#f59e0b 12%,var(--card))}
+ol.steps{padding-left:20px}ol.steps li{margin:6px 0}
+footer{border-top:1px solid var(--bd);padding:32px 0 56px;color:var(--mut);font-size:.9rem}
+footer a{color:var(--mut);text-decoration:underline}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><b>SUH Issue Helper</b><nav><a href="#features">특징</a><a href="#start">빠른 시작</a><a href="#options">옵션</a><a href="#example">예시</a><a href="https://github.com/Cassiiopeia/SUH-ISSUE-HELPER" target="_blank" rel="noopener">GitHub</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap">
+<h1>이슈에서 <span style="color:var(--pri2)">브랜치명</span>과 커밋 메시지를 자동으로</h1>
+<p class="lead">GitHub 이슈가 생성되거나 제목이 수정될 때 브랜치명과 커밋 메시지를 만들어 댓글로 추가하는 GitHub Action입니다.</p>
+<div class="badges"><span class="badge">GitHub Action</span><span class="badge">v1.0.4</span><span class="badge">MIT License</span></div>
+<div class="btns"><a class="btn pri" href="https://github.com/Cassiiopeia/SUH-ISSUE-HELPER" target="_blank" rel="noopener">GitHub에서 보기</a><a class="btn" href="#start" target="_blank" rel="noopener">빠른 시작</a></div>
+</div></section>
+<section id="features"><div class="wrap"><h2>특징</h2><p class="sub">이슈 제목 하나로 작업 시작 준비가 끝납니다.</p><div class="grid"><div class="card"><h3>브랜치명 자동 생성</h3><p>날짜, 이슈 번호, 정규화된 제목으로 브랜치명을 만듭니다.</p></div><div class="card"><h3>커밋 메시지 템플릿</h3><p>템플릿을 직접 지정해 팀 규칙에 맞는 커밋 메시지를 만듭니다.</p></div><div class="card"><h3>댓글 자동 갱신</h3><p>이슈 제목이 바뀌면 댓글도 자동으로 갱신됩니다.</p></div><div class="card"><h3>Private 저장소 지원</h3><p>사용자 토큰을 넘기면 Private 저장소에서도 동작합니다.</p></div><div class="card"><h3>한글·영문 제목 지원</h3><p>한글과 영문 이슈 제목을 모두 처리합니다.</p></div></div></div></section><section id="start"><div class="wrap"><h2>빠른 시작</h2><p class="sub">워크플로우 파일 하나만 추가하면 됩니다.</p><p>프로젝트의 <code>.github/workflows/issue-helper.yml</code> 파일을 만듭니다.</p><div class="code"><span class="lab">.github/workflows/issue-helper.yml</span><button class="copy" type="button" aria-label="복사">복사</button><pre><code>name: Issue Helper - Generate Branch &amp; Commit Messages
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  generate-comment:
+    if: github.event.action == 'opened' || (github.event.action == 'edited' &amp;&amp; github.event.changes.title)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Branch &amp; Commit Comment
+        uses: Cassiiopeia/github-issue-helper@deploy
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch_prefix: "feat/"
+          max_branch_length: 100
+          commit_template: "${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"</code></pre></div><p>샘플 워크플로우는 저장소의 <a href="https://github.com/Cassiiopeia/SUH-ISSUE-HELPER/tree/main/examples" target="_blank" rel="noopener">examples</a> 폴더에서 기본 사용법, 커스터마이징, Private 저장소용 예시를 볼 수 있습니다.</p></div></section><section id="options"><div class="wrap"><h2>입력 옵션과 출력값</h2><p class="sub">모든 입력은 선택입니다.</p><div class="tbl"><table><thead><tr><th>입력값</th><th>설명</th><th>기본값</th></tr></thead><tbody><tr><td><code>token</code></td><td>GitHub 토큰 (빈 값이면 GITHUB_TOKEN 자동 사용)</td><td><code>""</code></td></tr><tr><td><code>comment_marker</code></td><td>댓글 업데이트를 위한 마커</td><td>자동 생성 안내 주석</td></tr><tr><td><code>branch_prefix</code></td><td>브랜치 접두사 (예: feat/)</td><td><code>""</code></td></tr><tr><td><code>max_branch_length</code></td><td>브랜치 기본 부분 최대 길이 (prefix 제외)</td><td><code>"120"</code></td></tr><tr><td><code>commit_template</code></td><td>커밋 메시지 템플릿</td><td><code>"${issueTitle} : feat : {변경 사항에 대한 설명} ${issueUrl}"</code></td></tr></tbody></table></div><div class="tbl"><table><thead><tr><th>출력값</th><th>설명</th></tr></thead><tbody><tr><td><code>branchName</code></td><td>생성된 브랜치명</td></tr><tr><td><code>commitMessage</code></td><td>생성된 커밋 메시지</td></tr></tbody></table></div><h3>템플릿 변수</h3><ul><li><code>${issueTitle}</code> 이슈 제목 (이모지와 태그 제거, 특수문자 유지)</li><li><code>${issueUrl}</code> 이슈 URL</li><li><code>${issueNumber}</code> 이슈 번호</li><li><code>${branchName}</code> 생성된 브랜치명</li><li><code>${date}</code> 날짜 (YYYYMMDD)</li></ul></div></section><section id="example"><div class="wrap"><h2>동작 예시</h2><p class="sub">이슈 제목이 이렇게 바뀝니다.</p><p>이슈 제목: <code>[Bug] 로그인 페이지에서 비밀번호 입력 오류</code></p><div class="code"><span class="lab">브랜치명</span><button class="copy" type="button" aria-label="복사">복사</button><pre><code>feat/20250917_#123_로그인_페이지에서_비밀번호_입력_오류</code></pre></div><div class="code"><span class="lab">커밋 메시지</span><button class="copy" type="button" aria-label="복사">복사</button><pre><code>로그인 페이지에서 비밀번호 입력 오류 : feat : {변경 사항에 대한 설명} https://github.com/owner/repo/issues/123</code></pre></div><h3>정규화 규칙</h3><ol class="steps"><li><b>태그 제거</b>: [Bug], [Feature] 등의 태그를 제거합니다.</li><li><b>이모지 제거</b>: 이모지와 제어 문자를 제거합니다.</li><li><b>특수문자 처리</b>: 한글, 영문, 숫자를 제외한 문자는 <code>_</code> 로 바꿉니다.</li><li><b>브랜치명 형식</b>: <code>{prefix}{YYYYMMDD}_#{issueNumber}_{normalizedTitle}</code></li></ol><div class="note warn"><b>"Resource not accessible by integration" 오류가 나면</b><ol class="steps"><li>워크플로우에 <code>permissions: issues: write, contents: read</code> 를 추가합니다.</li><li>Settings &gt; Actions &gt; General 의 Workflow permissions 를 <b>Read and write permissions</b> 로 바꿉니다.</li><li>Private 저장소는 Personal Access Token(repo 권한)을 Secrets 에 등록하고 <code>token</code> 입력에 넘깁니다.</li></ol></div></div></section>
+</main>
+<footer><div class="wrap">
+<p>Made by <a href="https://github.com/Cassiiopeia" target="_blank" rel="noopener">SUH-LAB (서새찬)</a> · <a href="https://lab.suhsaechan.kr/dashboard" target="_blank" rel="noopener">포트폴리오</a> · <a href="https://github.com/Cassiiopeia/SUH-ISSUE-HELPER" target="_blank" rel="noopener">GitHub 저장소</a></p>
+</div></footer>
+<script>document.querySelectorAll('.copy').forEach(function(b){b.addEventListener('click',function(){var t=b.parentElement.querySelector('code').innerText;navigator.clipboard&&navigator.clipboard.writeText(t).then(function(){b.textContent='복사됨';setTimeout(function(){b.textContent='복사'},1400)})})})</script>
+</body>
+</html>
