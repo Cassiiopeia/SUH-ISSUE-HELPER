@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate Branch & Commit Comment
-        uses: Cassiiopeia/github-issue-helper@v1
+        uses: Cassiiopeia/github-issue-helper@deploy
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch_prefix: "feat/"
